@@ -12,14 +12,16 @@ username = ""          # Enter your username
 password = ""                   # Enter your password
 driver = webdriver.Chrome(executable_path="C:/Users/sectr/OneDrive/Desktop/PythonProjects/chromedriver_win32/chromedriver.exe",options=options)
 
-driver.get("https://www.reddit.com/")
+
 def logIn():            # Log In Function.
-    sleep(3)
-    log = driver.find_element_by_xpath("//a[contains(text(),'Log in')]").click()
+    driver.get(r"https://www.reddit.com/login/?dest=https%3A%2F%2Fwww.reddit.com%2F")
+    sleep(5)
     sleep(10)
-    username_in = driver.find_element_by_xpath("/html/body/div/div/div[2]/div/form/div[1]/fieldset[1]/input").send_keys(username,Keys.ENTER)
+    username_in = driver.find_element_by_class_name("AnimatedForm__textInput").send_keys(username,Keys.ENTER)
     pass_in = driver.find_element_by_xpath("//*[@id='loginPassword']").send_keys(password,Keys.ENTER)
     sleep(5)
+    profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
+    
 def check(current):                         # A check function to make sure that the same post doesn't get sent twice.
     if current in post_name:
         return True
@@ -72,4 +74,8 @@ def dm(post_link,receiver_username):
     close = driver.find_element_by_class_name("_3QHhpmOrsIj9Hy8FecxWKa._1PhPhuhKHqFwivRAkg2DkH._2SeZKjVwSpNwqshVnDJkYF.bwxXoigjZ4E9ofWIggxmp").click()
     
 
-profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
+try:
+    logIn()
+except NoSuchElementException:
+    profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
+
