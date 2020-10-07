@@ -4,23 +4,27 @@ import pyperclip
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 options = webdriver.ChromeOptions()
-options.add_argument("--user-data-dir=C:/Users/sectr/AppData/Local/Google/Chrome/User Data/Default")
+# this argument stores cookies so to eliminate the need for logging in again.
+options.add_argument("--user-data-dir=Enter/Path/To/AppData/Local/Google/Chrome/User Data/Default")
 options.add_argument("--profile-directory=Default")
 options.add_argument("--disable-notifications")
 post_name = []
 username = ""          # Enter your username
 password = ""                   # Enter your password
+#make sure you enter the path to your own chrome driver
 driver = webdriver.Chrome(executable_path="C:/Users/sectr/OneDrive/Desktop/PythonProjects/chromedriver_win32/chromedriver.exe",options=options)
 
 
 def logIn():            # Log In Function.
-    driver.get(r"https://www.reddit.com/login/?dest=https%3A%2F%2Fwww.reddit.com%2F")
-    sleep(5)
-    sleep(10)
-    username_in = driver.find_element_by_class_name("AnimatedForm__textInput").send_keys(username,Keys.ENTER)
-    pass_in = driver.find_element_by_xpath("//*[@id='loginPassword']").send_keys(password,Keys.ENTER)
-    sleep(5)
-    profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
+    try:
+        driver.get(r"https://www.reddit.com/login/?dest=https%3A%2F%2Fwww.reddit.com%2F")
+        sleep(5)
+        sleep(10)
+        username_in = driver.find_element_by_class_name("AnimatedForm__textInput").send_keys(username,Keys.ENTER)
+        pass_in = driver.find_element_by_xpath("//*[@id='loginPassword']").send_keys(password,Keys.ENTER)
+        sleep(5)
+    except NoSuchElementException:
+        profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
     
 def check(current):                         # A check function to make sure that the same post doesn't get sent twice.
     if current in post_name:
@@ -74,8 +78,6 @@ def dm(post_link,receiver_username):
     close = driver.find_element_by_class_name("_3QHhpmOrsIj9Hy8FecxWKa._1PhPhuhKHqFwivRAkg2DkH._2SeZKjVwSpNwqshVnDJkYF.bwxXoigjZ4E9ofWIggxmp").click()
     
 
-try:
-    logIn()
-except NoSuchElementException:
-    profile(str(input('Enter the name of the person you would like to send posts to : \n --> ')))
+logIn()
+
 
